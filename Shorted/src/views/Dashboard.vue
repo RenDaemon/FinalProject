@@ -1,85 +1,140 @@
 <template>
+<nav class="bg-indigo-700 border-gray-200 px-2 sm:px-4 py-2.5  dark:bg-gray-900">
+  <div class="container flex flex-wrap items-center justify-between mx-auto">
+    <a class="flex items-center">
+      <img src="https://storage.indoesports.com/images/xcn-logo.jpeg" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
+      <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-gray-200">XcN.Ravenツ</span>
+    </a>
+    <button data-collapse-toggle="navbar-default" type="button"
+      class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+      aria-controls="navbar-default" aria-expanded="false">
+      <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+          d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </button>
+    <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+      <ul
+        class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-indigo-700 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-indigo-700 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        <li>
+              <a class="flex-col">
+
+  <span class="block text-sm text-gray-200 dark:text-white"  id="username_display">Hi {{ this.email }}</span>
+  <span class="block text-xs text-gray-300 truncate dark:text-gray-400" id="id_display">UID : {{ this.uid }}</span>
+
+</a>
+        </li>
+        <li>
+        <button id="sign_out"
+          class="block px-4 py-2 text-sm text-gray-900 hover:bg-indigo-300 dark:hover:bg-gray-600 dark:text-gray-900 dark:hover:text-white bg-indigo-200 rounded-md"
+          @click="signOut">Sign out</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+
   <div>
     <h1 class="flex justify-center text-3xl font-bold my-24 mt-5">XcN.Site</h1>
-    <div>
-       <h1 class="flex justify-center text-2xl font-semibold mb-5">Hello</h1> 
-    </div>
-    <div id="username_display" class="display-6">{{ this.email }}</div>
-    <div id="id_display" class="display-6">{{ this.uid }}</div>
-    <button id="sign_out" class="mt-4 btn btn-danger" @click="signOut">
-      Logout
-    </button>
+    <form>
+      
+        <div class="flex justify-center">
+            <input type="url" id="website"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-lg"
+              placeholder="Type your long URL in here" required v-model="App.submit.rlinks.oldrlinks">
+        </div>
+        <div class="flex justify-center mt-5">
+          <span
+            class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+            xcn.site
+          </span>
+          <input type="text" id="website-admin"
+            class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-xs "
+            placeholder="Type your custom URL in here">
+          <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-6 "
+            @click="App.Shorten(App.submit.rlinks)"> Shorten </button>
+        </div>
+        
+    </form>
+
+
   </div>
-  <div>
-    <input type="text" v-model="oldLink" placeholder="example.com">
-    <input type="text" v-model="newLink" placeholder="http://127.0.0.1:5174/p/yourcustom">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-3  " @click="shortenLink(oldLink, newLink)"> Shorten </button>
+
+  <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-200 dark:text-gray-400 mt-20">
+      <thead class="text-xs text-gray-200 uppercase bg-indigo-700 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="py-3 px-6">
+            Your URL
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Click Count
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Edit
+          </th>
+          <th scope="col" class="py-3 px-6">
+            Delete
+          </th>
+
+        </tr>
+      </thead>
+     
+      <tbody v-for="link in App.rlinks"
+      :key ="link.id">
+        <tr class="bg-indigo-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-indigo-400 dark:hover:bg-gray-600">
+          <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+           {{ link.newrlinks }}
+          </th>
+          <td class="py-4 px-6">
+            <p class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</p>
+          </td>
+          <td class="py-4 px-6">
+            <button
+              class="inline-flex items-center justify-center w-10 h-10 mr-2 text-gray-900 transition-colors duration-150 bg-indigo-300 rounded-full focus:shadow-outline hover:bg-indigo-500">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                <path
+                  d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                </path>
+              </svg>
+            </button>
+          </td>
+          <td class="py-4 px-6">
+            <button
+              class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-pink-700 rounded-lg focus:shadow-outline hover:bg-pink-800">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
   </div>
+
+
 </template>
 
 <script>
   import {useApp} from '../stores/index';
-  import { getAuth } from "firebase/auth";
-  import { getFirestore, collection, updateDoc, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore"
-  
 
-  const auth = getAuth();
-  
   export default {
-    data() {
-        return {
-            email: auth.currentUser.email,
-            uid: auth.currentUser.uid,
-            Links: []
-        }
-    },
     setup() {
       const App = useApp();
       return {
         App,
       }
     },
-    created() {
+    mounted() {
+      this.App.renderLink();
     },
-    methods:{
-    async signOut() {
-    auth
-      .signOut()
-      .then(() => {
-        console.log("Sign Out completed");
-        this.$router.push("/");
-      })
-      .catch((error) => console.log(error));
-  },
-  async shortenLink(oldLink, newLink) {
-      try {
-        const docRef = await addDoc(collection(db, "Links"),{
-          id: "",
-          task: this.task,
-          category: this.$refs.category.value,
-          clear: false
-        })
-        const docUp = doc(db, "Links", docRef.id)
-        await updateDoc(docUp, {id: docRef.id})
-        console.log("Berhasil menambahkan ", docRef.id)
-        this.load()
-      }
-      catch(e) {
-        console.log("Gagal menambahkan ", e)
-      }
-    },
-  // {
-  //        try {
-  //       const docRef = await addDoc(collection(db, "Links"),{
-  //         oldLink: oldLink,
-  //         newLink: newLink,
-  //         count: 0,
-  //       })
-  //   }
-  //       catch(e) {
-  //       console.log("Gagal menambahkan ", e)
-  //     }
-  // }
-  }
 }
 </script>

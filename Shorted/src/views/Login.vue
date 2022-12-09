@@ -9,24 +9,24 @@
                 class="form-control" 
                 type="text" 
                 name="email" 
-                placeholder="email@adress.com"
-                v-model="email"
+              placeholder="email@adress.com"
+                v-model="App.email"
                 />
             </div>
             <div class="input">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
                 <input
                 class="form-control" 
-                type="text" 
+                type="password" 
                 name="password" 
                 placeholder="******"
-                v-model="password"
+                v-model="App.password"
                 />
             </div>
         <div >
             Don't Have an Account? <RouterLink class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" to="/Register">Register</RouterLink> 
         </div>
-        <button type="submit" id="login_button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
+        <button @click="App.login(App.email, App.password)" type="submit" id="login_button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
             Login
         </button>
         </form>
@@ -34,15 +34,8 @@
 </template>
 
 <script>
-  import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
   import {useApp} from '../stores/index';
   export default {
-    data() {
-        return {
-            email: "",
-            password: "",
-        }
-    },
     setup() {
       const App = useApp();
       return {
@@ -51,26 +44,5 @@
     },
     created() {
     },
-    methods: {
-    async login() {
-        
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, this.email, this.password)
-      .then(() => {
-        this.$router.push("/dashboard");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        // let alert_1 = document.querySelector("#alert_1");
-        // alert_1.classList.remove("d-none");
-        // alert_1.innerHTML = errorMessage;
-        // console.log(alert_1);
-      });
-  },
-    }
-    
   }
 </script>

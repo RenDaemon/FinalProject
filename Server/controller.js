@@ -184,26 +184,43 @@ router.get("/api/redirectLink", async (req, res) => {
       res.send(err)
   }
 });
-router.patch("/api/links/:id", (req, res) => {
+// router.patch("/api/links/:id", (req, res) => {
+//   try {
+//     console.log(req.params.id)
+//     db.collection("links")
+//       .doc(req.params.id)
+//       .update({
+//         newrlinks: req.body.newrlinks,
+//       })
+//       .then(() => {
+//         res.send({
+//           status: true,
+//           message: "Data berhasil diubah",
+//         });
+//       });
+//   } catch (error) {
+//     res.send({
+//       status: false,
+//       message: "Data gagal diubah",
+//     });
+//   }
+// });
+router.post("/api/update", async (req, res) => {
+  const Updatenewrlinks = req.body.Updatenewrlinks
+  const id = req.body.id
+  const docRef = doc(db, "links", id)
+
   try {
-    db.collection("links")
-      .doc(req.params.id)
-      .update({
-        newrlinks: req.body.newrlinks,
+      await updateDoc(docRef, {
+          newrlinks: "xcn.site:5173/" + Updatenewrlinks
       })
-      .then(() => {
-        res.send({
-          status: true,
-          message: "Data berhasil diubah",
-        });
-      });
-  } catch (error) {
-    res.send({
-      status: false,
-      message: "Data gagal diubah",
-    });
+      res.send({ message: "Succesfully edited" })
   }
-});
+  catch (err) {
+      console.log(err)
+      res.send(err)
+  }
+})
 
 router.delete("/api/links/:id", (req, res) => {
   try {

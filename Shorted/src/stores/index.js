@@ -137,15 +137,15 @@ actions:{
   async moveToLogin() {
     this.$router.push("/");
   },
-  async signOut() {
-    auth
-      .signOut()
-      .then(() => {
-        console.log("Sign Out completed");
-        this.$router.push("/");
-      })
-      .catch((error) => console.log(error));
-  },
+  // async signOut() {
+  //   auth
+  //     .signOut()
+  //     .then(() => {
+  //       console.log("Sign Out completed");
+  //       this.$router.push("/");
+  //     })
+  //     .catch((error) => console.log(error));
+  // },
   async Shorten(rlinks) {
     console.log("masuk shorten")
     if (!rlinks.oldrlinks && !rlinks.newrlinks) {
@@ -211,35 +211,48 @@ async direct() {
       console.log(response)
   })
 },
-async edit(rlinks) {
-  console.log(rlinks)
-  // if(this.Updatenewrlinks == ''){
-  //   this.newrlinks = this.Updatenewrlinks
-  // }
-  await axios.patch("http://127.0.0.1:3000/api/links/" + rlinks.id, rlinks)
-  .then(
-    (response) => {
-      if (response.status) {
-        Swal.fire({
-          title: "Success!",
-          text: `Succesesfully update user ${rlinks.nama}`,
-          icon: "success",
-          timer: 1500,
-          showConfirmButton: false,
-        });
-      }
-    },
-    (error) => {
-      Swal.fire({
-        title: "Error!",
-        text: `Seems like there is an error while updating user ${links.nama}<br>${error}`,
-        icon: "error",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    }
-  );
+async edit(id, newrlinks) {
+  console.log(newrlinks)
+  if (this.Updatenewrlinks == '') {
+      this.Updatenewrlinks = newrlinks.replace("xcn.site:5173/")
+  }
+  const res = await axios.post("http://localhost:3000/api/update", {
+      newrlinks: this.Updatenewrlinks,
+      id: id
+  })
+  this.rlinks = [];
+  this.renderLink()
+  this.Updatenewrlinks = ''
 },
+// async edit(rlinks) {
+//   console.log(rlinks)
+//   // if(this.Updatenewrlinks == ''){
+//   //   this.newrlinks = this.Updatenewrlinks
+//   // }
+//   await axios.patch("http://127.0.0.1:3000/api/links/" + rlinks.id, rlinks)
+//   .then(
+//     (response) => {
+//       if (response.status) {
+//         Swal.fire({
+//           title: "Success!",
+//           text: `Succesesfully update user ${rlinks.nama}`,
+//           icon: "success",
+//           timer: 1500,
+//           showConfirmButton: false,
+//         });
+//       }
+//     },
+//     (error) => {
+//       Swal.fire({
+//         title: "Error!",
+//         text: `Seems like there is an error while updating user ${links.nama}<br>${error}`,
+//         icon: "error",
+//         timer: 1500,
+//         showConfirmButton: false,
+//       });
+//     }
+//   );
+// },
 async linkdelete(linksid) {
   await axios.delete("http://127.0.0.1:3000/api/links/" + linksid).then(
     (response) => {
@@ -266,8 +279,20 @@ async linkdelete(linksid) {
      }
     );
   },
+  checkUid() {
+    if (localStorage.getItem('userToken') == null || localStorage.getItem('userToken') == '')
+    {
+        this.$router.push("/")
+    }
+    else
+    {
+        return;
+    }
+},
 },
 });
+
+
 
 
 

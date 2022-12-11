@@ -1,40 +1,47 @@
 <template>
-    <h1 class="flex justify-center text-3xl font-bold my-24 mt-5">XcN.Site</h1>
-    <div class="flex justify-center ">
-        <form class="bg-gradient-to-r from-cyan-500 to-blue-500 shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="login">
-            <h2 class="flex justify-center text text-2xl font-semibold">Login</h2>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email Adress</label>
-                <input
-                class="form-control" 
-                type="text" 
-                name="email" 
-              placeholder="email@adress.com"
-                v-model="App.email"
-                />
-            </div>
-            <div class="input">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
-                <input
-                class="form-control" 
-                type="password" 
-                name="password" 
-                placeholder="******"
-                v-model="App.password"
-                />
-            </div>
-        <div >
-            Don't Have an Account? <RouterLink class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" to="/Register">Register</RouterLink> 
+
+    <div class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-">
+    <div class="w-full max-w-md space-y-8">
+      <div >
+        <img class="mx-auto h-30 w-auto" src="../assets/XcN_RAVEN-removebg-preview.png" alt="Your Company" />
+        
+
+        <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-white">Login</h2>
+        <p class="mt-2 text-center text-sm text-zinc-300 ">
+          Don't have an account?
+          {{ ' ' }}
+          <RouterLink href="#" class="font-medium text-zinc-200 hover:text-sky-300 "  to="/Register">Register</RouterLink>
+        </p>
+      </div>
+      
+      <form class="mt-8 space-y-6 " @submit.prevent="login" method="POST">
+        <input type="hidden" name="remember" value="true" />
+        <div class="-space-y-px rounded-md shadow-sm">
+          <div>
+            <label for="email-address" class="sr-only">Email address</label>
+            <input id="email-address" name="email" type="email" autocomplete="email" v-model="App.email" required="" class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email address" />
+          </div>
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" v-model="App.password" required="" class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+          </div>
         </div>
-        <button @click="App.login(App.email, App.password)" type="submit" id="login_button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
+
+        
+        <div>
+          <button @click="App.login(App.email, App.password)" type="submit" id="login_button"  class="group relative flex w-full justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-sm font-medium text-white hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 drop-shadow-lg">
             Login
         </button>
-        </form>
-    </div>
+        </div>
+      </form>
+
+  </div>
+  </div>
+  
 </template>
 
 <script>
-  import {useApp} from '../stores/index';
+   import {useApp} from '../stores/index';
   export default {
     setup() {
       const App = useApp();

@@ -2,7 +2,7 @@
 <nav class="bg-indigo-700 border-gray-200 px-2 sm:px-4 py-2.5  dark:bg-gray-900">
   <div class="container flex flex-wrap items-center justify-between mx-auto">
     <a class="flex items-center">
-      <img src="https://storage.indoesports.com/images/xcn-logo.jpeg" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
+      <img src="../assets/XcN_RAVEN-removebg-preview.png" class="h-6 mr-3 sm:h-9" />
       <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-gray-200">XcN.Ravenツ</span>
     </a>
     <button data-collapse-toggle="navbar-default" type="button"
@@ -103,21 +103,17 @@
                 </path>
               </svg>
             </button>
-            <div v-if="link.editPages">
+            <div v-if="link.editPages" class="text-gray-900">
               <label for="">Custom Link</label>
               <p>xcn.site:5173/ &nbsp;</p>
-              <input v-model="newrlinks">
-            </div>
+              <input v-model="App.submit.rlinks.Updatenewrlinks">
               <div>
-                <button @click="App.edit(link.id, link.newrlinks)">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                <path
-                  d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
-                </path>
-              </svg>
+                <button @click="App.edit(link.id, link.newrlinks)" class="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-xs px-2.5 py-1.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 mt-4 mr-3">
+                  Edit
                 </button>
-                <button @click="link.editPages = !link.editPages">Cancel</button>
+                <button @click="link.editPages = !link.editPages" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-xs px-2.5 py-1.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 ml-3">Cancel</button>
               </div>
+            </div>
           </td>
           <!-- Delete -->
           <td class="py-4 px-6">
@@ -139,7 +135,6 @@
 
 
 </template>
-
 <script>
   import {useApp} from '../stores/index';
 
@@ -153,5 +148,8 @@
     mounted() {
       this.App.renderLink();
     },
+    beforeMount() {
+      this.App.checkUid();
+    }
 }
 </script>

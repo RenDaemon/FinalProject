@@ -22,7 +22,6 @@
               <a class="flex-col">
 
   <span class="block text-sm text-gray-200 dark:text-white"  id="username_display">Hi : {{ App.email }}</span>
-  <span class="block text-xs text-gray-300 truncate dark:text-gray-400" id="id_display">UID : {{ App.uid }}</span>
 
 </a>
         </li>
@@ -48,7 +47,7 @@
         <div class="flex justify-center mt-5">
           <span
             class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-            xcn.site
+            xcn.site:5173/
           </span>
           <input type="text" id="website-admin"
             class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-xs "

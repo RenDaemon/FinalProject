@@ -1,7 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {db, auth} from "./config.js"
+import { db, auth } from "./config.js"
+import { getDocs, collection, query, where, addDoc, updateDoc, doc } from "firebase/firestore";
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -25,6 +26,18 @@ router.post("/api/login", async(req, res) => {
   {
     console.log(err)
     req.send(err)
+  }
+});
+router.post("/api/logout", async (req, res) => {
+  try {
+      await signOut(auth).then(() => {
+          console.log("berhasil log out")
+          res.send("berhasil log out")
+      })
+  }
+  catch (err) {
+      console.log(err)
+      res.send(err)
   }
 });
 
@@ -69,17 +82,28 @@ router.post("/Dashboard", (req, res) => {
   }
 });
 
-router.post("/api/links", (req, res) => {
+router.post("/api/rlinks", (req, res) => {
+  let click = 0
+  console.log("test")
   console.log(req.body)
-  try {
+  console.log(req.body.newrlinks)
+  console.log(req.body.oldrlinks)
+  try { 
     var oldrlinks = req.body.oldrlinks;
     var newrlinks = req.body.newrlinks;
     var uid = req.body.uid;
-    db.collection("links").add({
+    // db.collection("links").add({
+    //   oldrlinks: oldrlinks,
+    //   newrlinks: newrlinks,
+    //   uid: uid,
+    // });
+    const q = addDoc(collection(db,"links"), {
       oldrlinks: oldrlinks,
       newrlinks: newrlinks,
       uid: uid,
-    });
+      click: 0,
+      editPages: false,
+    })
     res.send({
       status: true,
       message: "Data berhasil disimpan",
@@ -91,25 +115,111 @@ router.post("/api/links", (req, res) => {
     });
   }
 });
+   
 
 router.get("/api/links", async (req, res) => {
   const uid = req.query.uid
   let links = [];
+  console.log(uid)
+  console.log("mau masuk fungsi")
   try {
+      console.log("masuk try catch")
       const q = query(collection(db, "links"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((docSnap) => {
-          let data = docSnap.data();
-          let id = docSnap.id;
-          console.log()
-          links.push({ id, ...data });
+        let data = docSnap.data();
+        let id = docSnap.id;
+        links.push({ id, ...data });
       })
-      console.log(links)
       res.send(links)
+      console.log(links)
   }
   catch (error) {
-      console.log("udah tapi error")
-      console.log(error)
-      res.send(error)
+    console.log("udah tapi error")
+    console.log(error)
+    res.send(error)
+  }
+});
+router.get("/api/redirectLink", async (req, res) => {
+  const url = req.query.url
+  const surl = url.replace("http://","")
+  console.log(surl)
+
+  let id = ''
+  let click = 0
+  let oldrlink = ''
+  try {
+      const q = query(collection(db, "links"), where("newrlinks", "==", surl));
+      const querySnapshot = await getDocs(q);
+      console.log("masuk try") 
+      // querySnapshot.forEach((docS) => {
+      //   console.log(docS.data(oldrlinks))
+      //   console.log("masuk snapshhot")
+      // })
+      querySnapshot.forEach((docSnap) => {
+        console.log("masuk foreach")
+          id = docSnap.id
+          if (docSnap == null || docSnap === null) {
+              console.log("Cannot find associated link")
+              res.send("Cannot find associated link")
+          }
+          else {
+              console.log("uda kesini")
+              const docData = docSnap.data()
+              click = parseInt(docData.click)
+              oldrlink = docData.oldrlinks
+              res.send(oldrlink)
+              console.log(oldrlink)
+              console.log(id)
+              updateDoc(doc(db, "links", id), {
+                  click: click + 1
+              })
+              // console.log(click)
+          }
+      });
+      // res.send(oldrlink)
+  }
+  catch (err) {
+      console.log(err)
+      res.send(err)
+  }
+});
+router.patch("/api/links/:id", (req, res) => {
+  try {
+    db.collection("links")
+      .doc(req.params.id)
+      .update({
+        newrlinks: req.body.newrlinks,
+      })
+      .then(() => {
+        res.send({
+          status: true,
+          message: "Data berhasil diubah",
+        });
+      });
+  } catch (error) {
+    res.send({
+      status: false,
+      message: "Data gagal diubah",
+    });
+  }
+});
+
+router.delete("/api/links/:id", (req, res) => {
+  try {
+    db.collection("links")
+      .doc(req.params.id)
+      .delete()
+      .then(() => {
+        res.send({
+          status: true,
+          message: "Data berhasil dihapus",
+        });
+      });
+  } catch (error) {
+    res.send({
+      status: false,
+      message: "Data gagal dihapus",
+    });
   }
 });

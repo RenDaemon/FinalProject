@@ -21,23 +21,20 @@
         <li>
               <a class="flex-col">
 
-  <span class="block text-sm text-gray-200 dark:text-white"  id="username_display">Hi {{ this.email }}</span>
-  <span class="block text-xs text-gray-300 truncate dark:text-gray-400" id="id_display">UID : {{ this.uid }}</span>
+  <span class="block text-sm text-gray-200 dark:text-white"  id="username_display">Hi : {{ App.email }}</span>
+  <span class="block text-xs text-gray-300 truncate dark:text-gray-400" id="id_display">UID : {{ App.uid }}</span>
 
 </a>
         </li>
         <li>
         <button id="sign_out"
           class="block px-4 py-2 text-sm text-gray-900 hover:bg-indigo-300 dark:hover:bg-gray-600 dark:text-gray-900 dark:hover:text-white bg-indigo-200 rounded-md"
-          @click="signOut">Sign out</button>
+          @click="App.logout()">Sign out</button>
         </li>
       </ul>
     </div>
   </div>
 </nav>
-
-  
-
 
   <div>
     <h1 class="flex justify-center text-3xl font-bold my-24 mt-5">XcN.Site</h1>
@@ -55,7 +52,8 @@
           </span>
           <input type="text" id="website-admin"
             class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 max-w-xs "
-            placeholder="Type your custom URL in here">
+            placeholder="Type your custom URL in here"
+            v-model="App.submit.rlinks.newrlinks">
           <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-6 "
             @click="App.Shorten(App.submit.rlinks)"> Shorten </button>
         </div>
@@ -75,7 +73,7 @@
           <th scope="col" class="py-3 px-6">
             Click Count
           </th>
-          <th scope="col" class="py-3 px-6">
+          <th @click= "col" class="py-3 px-6">
             Edit
           </th>
           <th scope="col" class="py-3 px-6">
@@ -89,13 +87,15 @@
       :key ="link.id">
         <tr class="bg-indigo-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-indigo-400 dark:hover:bg-gray-600">
           <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-           {{ link.newrlinks }}
+          <a target="_blank"  v-bind:href="'http://'+link.newrlinks">{{ link.newrlinks }}</a>
           </th>
           <td class="py-4 px-6">
-            <p class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</p>
+            <p class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{link.click}} </p>
           </td>
           <td class="py-4 px-6">
+            <!-- edit -->
             <button
+            v-if="!link.editpages" @click="link.editPages = !editPages"
               class="inline-flex items-center justify-center w-10 h-10 mr-2 text-gray-900 transition-colors duration-150 bg-indigo-300 rounded-full focus:shadow-outline hover:bg-indigo-500">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                 <path
@@ -103,9 +103,26 @@
                 </path>
               </svg>
             </button>
+            <div v-if="link.editPages">
+              <label for="">Custom Link</label>
+              <p>xcn.site:5173/ &nbsp;</p>
+              <input v-model="newrlinks">
+            </div>
+              <div>
+                <button @click="App.edit(link.id, link.newrlinks)">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                <path
+                  d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                </path>
+              </svg>
+                </button>
+                <button @click="link.editPages = !link.editPages">Cancel</button>
+              </div>
           </td>
+          <!-- Delete -->
           <td class="py-4 px-6">
             <button
+            @click="App.linkdelete(link.id)"
               class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-pink-700 rounded-lg focus:shadow-outline hover:bg-pink-800">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">

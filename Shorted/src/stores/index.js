@@ -8,6 +8,9 @@ import {
   getFirestore,
   collection,
   onSnapshot,
+  query,
+  where,
+  doc
 } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 // isikan firebaseConfig disini
@@ -30,14 +33,14 @@ export const useApp = defineStore({
     state: ()=>  ({
       email: '',
       password:'',
-     
+      url: window.location.href,
     submit: {
       user: {},
       rlinks:{},
       slink:{},
+      Updatenewrlinks:'',
     },
     rlinks: []
-
   }),
 actions:{
   async login(email, password) { 
@@ -69,7 +72,36 @@ actions:{
           showConfirmButton: false,
         });  
     })
-    },
+  },
+  async logout() {
+    const res = await axios
+      .post("http://localhost:3000/api/logout")
+      .then(
+        (response) => {
+          console.log(response);
+          localStorage.removeItem("userToken");
+          if (response.status) {
+            Swal.fire({
+              title: "Success!",
+              text: `Succesesfully Log out`,
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+            router.push("/");
+          }
+        },
+        (error) => {
+          Swal.fire({
+            title: "Error!",
+            text: `Seems like there is an error while Log out`,
+            icon: "error",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      );
+  },
   async moveToRegister() {
     this.$router.push("/Register");
   },
@@ -115,7 +147,9 @@ actions:{
       .catch((error) => console.log(error));
   },
   async Shorten(rlinks) {
+    console.log("masuk shorten")
     if (!rlinks.oldrlinks && !rlinks.newrlinks) {
+      console.log("masuk shorten tapi gagal")
       return;
     }
     await axios
@@ -157,9 +191,9 @@ actions:{
     .then((response)=>{
         console.log(response)
         const links = response.data
-        this.links = []
-        this.links.push(...response.data)
-        console.log(this.links)
+        this.rlinks = []
+        this.rlinks.push(...response.data)
+        console.log(this.rlinks)
         console.log("berhasil ges")
     })
     .catch((err) => {
@@ -167,5 +201,73 @@ actions:{
         console.log(err)
     })
 },
-}
+async direct() {
+  console.log("tes")
+  const redLink = await axios.get("http://localhost:3000/api/redirectLink", {
+      params: { url: this.url }
+  })
+  .then((response)=>{
+      window.location.replace(response.data)
+      console.log(response)
+  })
+},
+async edit(rlinks) {
+  console.log(rlinks)
+  // if(this.Updatenewrlinks == ''){
+  //   this.newrlinks = this.Updatenewrlinks
+  // }
+  await axios.patch("http://127.0.0.1:3000/api/links/" + rlinks.id, rlinks)
+  .then(
+    (response) => {
+      if (response.status) {
+        Swal.fire({
+          title: "Success!",
+          text: `Succesesfully update user ${rlinks.nama}`,
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    },
+    (error) => {
+      Swal.fire({
+        title: "Error!",
+        text: `Seems like there is an error while updating user ${links.nama}<br>${error}`,
+        icon: "error",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
+  );
+},
+async linkdelete(linksid) {
+  await axios.delete("http://127.0.0.1:3000/api/links/" + linksid).then(
+    (response) => {
+      this.submit.rlinks = {};
+      if (response.status) {
+        Swal.fire({
+          title: "Success!",
+          text: `Succesesfully delete user `,
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        this.renderLink();
+      }
+    },
+    (error) => {
+      Swal.fire({
+        title: "Error!",
+        text: `Seems like there is an error while deleting user <br>${error}`,
+        icon: "error",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+     }
+    );
+  },
+},
 });
+
+
+

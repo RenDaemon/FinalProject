@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Register from'../views/Register.vue'
-import Reset from'../views/Reset.vue'
+import Redirect from'../views/Redirect.vue'
 import Forget from'../views/Forget.vue'
 import Dashboard from'../views/Dashboard.vue'
 
@@ -18,11 +18,11 @@ const router = createRouter({
       name: 'Register',
       component: () => import ("../views/Register.vue")
     },
-    // {
-    //   path: '/Reset',
-    //   name: 'Reset',
-    //   component: Reset
-    // },
+    {
+      path: '/:Redirect',
+      name: 'Redirect',
+      component: () => import ("../views/Redirect.vue")
+    },
     // {
     //   path: '/Forget',
     //   name: 'Forget',

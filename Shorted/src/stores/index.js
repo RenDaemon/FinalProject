@@ -335,7 +335,7 @@ async linkdelete(linksid) {
   checkUid() {
     if (localStorage.getItem('userToken') == null || localStorage.getItem('userToken') == '')
     {
-        this.$router.push("/")
+       router.push("/")
     }
     else
     {

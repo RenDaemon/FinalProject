@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { db, auth } from "./config.js"
 import { getDocs, collection, query, where, addDoc, updateDoc, doc } from "firebase/firestore";
 
@@ -25,7 +25,7 @@ router.post("/api/login", async(req, res) => {
   catch(err)
   {
     console.log(err)
-    req.send(err)
+    res.send(err)
   }
 });
 router.post("/api/logout", async (req, res) => {
@@ -154,6 +154,7 @@ router.get("/api/redirectLink", async (req, res) => {
       console.log("masuk try") 
       // querySnapshot.forEach((docS) => {
       //   console.log(docS.data(oldrlinks))
+      
       //   console.log("masuk snapshhot")
       // })
       querySnapshot.forEach((docSnap) => {

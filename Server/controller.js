@@ -206,15 +206,16 @@ router.get("/api/redirectLink", async (req, res) => {
 //   }
 // });
 router.post("/api/update", async (req, res) => {
-  const Updatenewrlinks = req.body.Updatenewrlinks
+  const Updatenewrlinks = req.body.newrlinks
   const id = req.body.id
   const docRef = doc(db, "links", id)
+  console.log(id,Updatenewrlinks)
 
   try {
       await updateDoc(docRef, {
           newrlinks: "xcn.site:5173/" + Updatenewrlinks
       })
-      res.send({ message: "Succesfully edited" })
+       .then(() =>res.send({ message: "Succesfully edited" }))
   }
   catch (err) {
       console.log(err)

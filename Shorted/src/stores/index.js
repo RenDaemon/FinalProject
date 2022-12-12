@@ -163,7 +163,7 @@ actions:{
             console.log(response)
             alert("User successfully registered")
             this.$router.push('/login')
-        }
+        } 
         console.log(response);
         if (response.status) {
           Swal.fire({
@@ -265,12 +265,12 @@ async direct() {
   })
 },
 async edit(id, newrlinks) {
-  console.log(newrlinks)
+  console.log(id,  newrlinks)
   if (this.Updatenewrlinks == '') {
       this.Updatenewrlinks = newrlinks.replace("xcn.site:5173/")
   }
   const res = await axios.post("http://localhost:3000/api/update", {
-      newrlinks: this.Updatenewrlinks,
+      newrlinks: newrlinks,
       id: id
   })
   this.rlinks = [];

@@ -105,9 +105,9 @@
             <div v-if="link.editPages" class="text-gray-900">
               <label for="">Custom Link</label>
               <p>xcn.site:5173/ &nbsp;</p>
-              <input v-model="App.submit.rlinks.Updatenewrlinks">
+              <input v-model="App.submit.Updatenewrlinks">
               <div>
-                <button @click="App.edit(link.id, link.newrlinks)" class="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-xs px-2.5 py-1.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 mt-4 mr-3">
+                <button @click="App.edit(link.id, App.submit.Updatenewrlinks)" class="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-xs px-2.5 py-1.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 mt-4 mr-3">
                   Edit
                 </button>
                 <button @click="link.editPages = !link.editPages" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-xs px-2.5 py-1.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 ml-3">Cancel</button>
